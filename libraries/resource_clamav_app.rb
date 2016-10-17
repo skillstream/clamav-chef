@@ -21,6 +21,7 @@
 
 require 'chef/resource'
 require_relative 'helpers_defaults'
+require_relative 'helpers_centos'
 
 class Chef
   class Resource
@@ -29,7 +30,7 @@ class Chef
     # @author Jonathan Hartman <j@p4nt5.com>
     class ClamavApp < Resource
       include ClamavCookbook::Helpers::Defaults
-
+      include ClamavCookbook::Helpers::Centos
       provides :clamav_app
 
       default_action :install
@@ -61,6 +62,7 @@ class Chef
             version new_resource.version unless new_resource.version == 'latest'
           end
         end
+        centos7_post_install if node['platform_family'] == 'rhel' and node['platform_version'].to_i >= 7
       end
 
       #
